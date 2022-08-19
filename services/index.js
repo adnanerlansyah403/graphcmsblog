@@ -122,6 +122,21 @@ export const getSimilarPosts = async (categories, slug) => {
   return results.posts;
 }
 
+export const getCurrentCategory = async (slug) => {
+  const query = gql`
+    query GetCategory($slug: String!) {
+      category(where: {slug: $slug}) {
+        name
+        slug
+      }
+    }
+  `
+
+  const result = await request(graphqlAPI, query, { slug });
+
+  return result.category;
+}
+
 export const getCategories = async () => {
   const query = gql`
     query GetCategories {

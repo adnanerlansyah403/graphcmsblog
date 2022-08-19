@@ -3,8 +3,10 @@ import { useRouter } from 'next/router';
 
 import { getCategories, getCategoryPost } from '../../services';
 import { PostCard, Categories, Loader } from '../../components';
+import Head from 'next/head';
+import { getCurrentCategory } from './../../services/index';
 
-const CategoryPost = ({ posts }) => {
+const CategoryPost = ({ posts, category }) => {
   const router = useRouter();
 
   if (router.isFallback) {
@@ -13,12 +15,18 @@ const CategoryPost = ({ posts }) => {
 
   return (
     <div className="container mx-auto px-10 mb-8">
+      <Head>
+        <title>CMS Blogs - {category.name} </title>
+      </Head>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         <div className="col-span-1 lg:col-span-8">
-          {console.log(posts)}
-          {posts.map((post, index) => (
+          {posts.length > 0 ? posts.map((post, index) => (
             <PostCard key={index} post={post.node} />
-          ))}
+          )) : 
+            <div className="text-center">
+              <h1 className="text-3xl font-poppins font-bold text-gray-800">No posts found</h1>
+            </div>
+          }
         </div>
         <div className="col-span-1 lg:col-span-4">
           <div className="relative lg:sticky top-8">
@@ -34,9 +42,10 @@ export default CategoryPost;
 // Fetch data at build time
 export async function getStaticProps({ params }) {
   const posts = await getCategoryPost(params.slug);
+  const category = await getCurrentCategory(params.slug);
 
   return {
-    props: { posts },
+    props: { posts, category },
   };
 }
 
