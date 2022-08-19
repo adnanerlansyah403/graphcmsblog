@@ -7,9 +7,9 @@ const CommentsForm = ({ slug }) => {
   const [error, setError] = useState(false)
   const [localStorage, setLocalstorage] = useState(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
-  const commentEl = useRef()
-  const nameEl = useRef()
-  const emailEl = useRef()
+  const commentEl = useRef("")
+  const nameEl = useRef("")
+  const emailEl = useRef("")
   const storeDataEl = useRef()
 
   useEffect(() => {
@@ -26,7 +26,6 @@ const CommentsForm = ({ slug }) => {
     const { checked: storeData } = storeDataEl.current
 
     if(!comment || !name || !email) {
-      console.log('Please fill out all fields')
       setError(true)
       return
     }
@@ -50,6 +49,7 @@ const CommentsForm = ({ slug }) => {
         setShowSuccessMessage(false)
       }, 3000)
     })
+
   }
   
   return (
